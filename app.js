@@ -24,5 +24,8 @@ app.on('error', (err) => {
 });
 
 const port = process.env.PORT || 3000;
-console.log("webserver started on port", port);
-app.listen(port);
+const server = app.listen(port, () => {
+  console.log(`webserver started on port ${port}`);
+});
+
+module.exports = server; // for testing
