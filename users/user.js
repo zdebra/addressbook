@@ -24,6 +24,14 @@ class User {
         return this._createdAt;
     }
 
+    get short() {
+        return {
+            id: this.id,
+            email: this.email,
+            createdAt: this.createdAt
+        }
+    }
+
     async passwordMatch(password) {
         const match = await utils.comparePasswordWithHash(password, this._passwordHash);
         return match

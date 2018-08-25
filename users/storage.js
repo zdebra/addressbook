@@ -2,7 +2,7 @@ const format = require('util').format;
 
 class UserStorage {
     constructor() {
-        this._users = [];
+        this._users = new Map();
     }
 
     async insert(user) {
@@ -16,17 +16,18 @@ class UserStorage {
         if (!user.passwordHash) {
             throw new Error("missing password hash attribute");
         }
-        this._users.push(user);
-    
+        if (this._users.has(user.email)) {
+            throw new Error(format("user %s already exist", user.email))
+        }
+        this._users.set(user.email, user);
     }
 
-    async withId(id) {
-        for (let i = 0; i < this._users.length; i++) {
-            if (this._users[i].id == id) {
-                return this._users[i];
-            }
+    async withEmail(email) {
+        const user = this._users.get(email);
+        if (!user) {
+            throw new Error(format("user with email %s doesn't exist", email));
         }
-        throw new Error(format("user with id %s doesn't exist", id));
+        return user;
     }
 }
 
