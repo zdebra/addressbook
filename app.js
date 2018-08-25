@@ -24,9 +24,9 @@ app.use(route.post("/users", async (ctx) => {
 }));
 
 app.on('error', (err) => {
-  console.log(err)
+  console.log(err);
 });
 
 const port = process.env.PORT || 3000;
-console.log("webserver started on port", port)
+console.log("webserver started on port", port);
 app.listen(port);
