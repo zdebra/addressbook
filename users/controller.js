@@ -2,6 +2,7 @@ const uuid = require('uuid/v4');
 const jwt = require('jsonwebtoken');
 const utils = require('./utils');
 const User = require('./user');
+const ExposedError = require('../error');
 
 class UserController {
     constructor(userStorage, contactStorage, appSecret, tokenExpSeconds) {
@@ -12,11 +13,11 @@ class UserController {
     }
 
     async registerAccount(email, password)  {
-        if (!email) {
-            throw new Error("email is required");
+        if (!utils.validateEmail(email)) {
+            throw new ExposedError(400,"invalid email")
         }
-        if (!password) {
-            throw new Error("password is required");
+        if (!utils.validatePassword(password)) {
+            throw new ExposedError(400 ,"invalid password: must contain at least 6 characters, one number, one lowercase and one uppercase letter");
         }
 
         const passwordHash = await utils.hashPassword(password);
@@ -26,10 +27,16 @@ class UserController {
     }
 
     async login(email,password) {
-        const userFromStorage = await this._userStorage.withEmail(email);
+        let userFromStorage;
+        try {
+            userFromStorage = await this._userStorage.withEmail(email);
+        } catch(err) {
+            throw new ExposedError(404,`user ${email} doesn't exist: ${err.message}`);
+        }
+
         const passwordMatch = await userFromStorage.passwordMatch(password);
         if (!passwordMatch) {
-            throw new Error("invalid password");
+            throw new ExposedError(401,"invalid password");
         }
         return jwt.sign({ email: email }, this._appSecret, {expiresIn: this._tokenExpSeconds});
     }
