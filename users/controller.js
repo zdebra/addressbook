@@ -5,9 +5,8 @@ const User = require('./user');
 const ExposedError = require('../error');
 
 class UserController {
-    constructor(userStorage, contactStorage, appSecret, tokenExpSeconds) {
-        this._userStorage = userStorage;
-        this._contactStorage = contactStorage;
+    constructor(storage, appSecret, tokenExpSeconds) {
+        this._storage = storage;
         this._appSecret = appSecret;
         this._tokenExpSeconds = tokenExpSeconds;
     }
@@ -22,14 +21,14 @@ class UserController {
 
         const passwordHash = await utils.hashPassword(password);
         const user = new User(uuid(), email, passwordHash, Date.now());
-        await this._userStorage.insert(user);
+        await this._storage.insert(user);
         return user;
     }
 
     async login(email,password) {
         let userFromStorage;
         try {
-            userFromStorage = await this._userStorage.withEmail(email);
+            userFromStorage = await this._storage.withEmail(email);
         } catch(err) {
             throw new ExposedError(404,`user ${email} doesn't exist: ${err.message}`);
         }
@@ -38,12 +37,9 @@ class UserController {
         if (!passwordMatch) {
             throw new ExposedError(401,"invalid password");
         }
-        return jwt.sign({ email: email }, this._appSecret, {expiresIn: this._tokenExpSeconds});
+        return jwt.sign({ id: userFromStorage.id,email: email }, this._appSecret, {expiresIn: this._tokenExpSeconds});
     }
 
-    async createContact(userId, contact) {
-        
-    }
 }
 
 module.exports = UserController;

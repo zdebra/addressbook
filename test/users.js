@@ -65,6 +65,7 @@ describe("user management", () => {
             assert.equal(loginResponse.type, "application/json");
             const token = jwt.verify(loginResponse.body.token, appSecret)
             assert.equal(token.email, userEmail);
+            assert.exists(token.id, userEmail);
         });
 
         it("should fail with wrong password", async () => {
