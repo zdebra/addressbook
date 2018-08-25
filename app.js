@@ -23,11 +23,10 @@ app.use(route.post("/users", async (ctx) => {
   await userCtrl.registerAccount(ctx);
 }));
 
-
 app.on('error', (err) => {
   console.log(err)
 });
 
-const port = 3000
+const port = process.env.PORT || 3000;
 console.log("webserver started on port", port)
 app.listen(port);
