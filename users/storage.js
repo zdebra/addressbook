@@ -6,7 +6,6 @@ class UserStorage {
     }
 
     async insert(user) {
-        console.log("insert is called", user)
         if (!user.id) {
             throw new Error("missing id attribute");
         }

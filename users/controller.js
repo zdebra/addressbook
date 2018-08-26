@@ -39,7 +39,6 @@ class UserController {
         }
         return jwt.sign({ id: userFromStorage.id,email: email }, this._appSecret, {expiresIn: this._tokenExpSeconds});
     }
-
 }
 
 module.exports = UserController;

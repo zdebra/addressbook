@@ -13,7 +13,8 @@ class ContactController {
         if (!utils.validContact(contact)) {
             throw new ExposedError(400, "invalid contact")
         }
-        await this_.storage.store(contact);
+        await this._storage.store(contact);
+        return contact;
     }
 }
 

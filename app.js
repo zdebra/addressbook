@@ -1,7 +1,7 @@
 const Koa = require('koa');
 const app = new Koa();
 const bodyParser = require('koa-bodyparser');
-const setupHandlers = require('./handlers');
+const createRouter = require('./router');
 
 app.use(async (ctx,next) => {
   try {
@@ -15,11 +15,14 @@ app.use(async (ctx,next) => {
   }
 });
 
+app.use(bodyParser());
+
 const appSecret = process.env.APP_SECRET || 'app-secret';
 const tokenExpSeconds = process.env.TOKEN_EXP || '1h';
+const router = createRouter(appSecret, tokenExpSeconds);
 
-app.use(bodyParser());
-setupHandlers(app, appSecret, tokenExpSeconds);
+app.use(router.routes());
+app.use(router.allowedMethods());
 
 app.on('error', (err) => {
   console.log(err);
