@@ -1,5 +1,6 @@
 const appSecret = "test-app-secret";
-process.env.APP_SECRET = appSecret;
+process.env.APP_SECRET = "test-app-secret";
+process.env.NODE_ENV = require('../constants').testEnv;
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');

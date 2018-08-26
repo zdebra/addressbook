@@ -1,3 +1,5 @@
+const constants = require('../constants');
+
 class ContactMemoryStorage {
     constructor() {
         this._contacts = [];
@@ -8,8 +10,10 @@ class ContactMemoryStorage {
     }
 }
 
-function make() {
-    return new ContactMemoryStorage();
+function make(env) {
+    if (env == constants.testEnv) {
+        return new ContactMemoryStorage();
+    }
 }
 
 module.exports = make;

@@ -1,6 +1,7 @@
 const format = require('util').format;
+const constants = require('../constants');
 
-class UserStorage {
+class UserMemoryStorage {
     constructor() {
         this._users = new Map();
     }
@@ -30,4 +31,10 @@ class UserStorage {
     }
 }
 
-module.exports = UserStorage;
+function make(env) {
+    if (env == constants.testEnv) {
+        return new UserMemoryStorage();
+    }
+}
+
+module.exports = make;

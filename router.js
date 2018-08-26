@@ -1,14 +1,14 @@
 const Router = require('koa-router');
 const UserController = require('./users/controller');
-const UserStorage = require('./users/storage');
+const makeUserStorage = require('./users/storage');
 const makeContactStorage = require('./contancts/storage');
 const ContactController = require('./contancts/controller');
 const ExposedError = require('./error');
 const jwt = require('jsonwebtoken');
 
-function createRouter(appSecret, tokenExpSeconds) {
-    const userStorage = new UserStorage();
-    const contactStorage = makeContactStorage();
+function createRouter(appSecret, tokenExpSeconds, env) {
+    const userStorage = makeUserStorage(env);
+    const contactStorage = makeContactStorage(env);
     const userCtrl = new UserController(userStorage, appSecret, tokenExpSeconds);
     const contactCtrl = new ContactController(contactStorage);
 
