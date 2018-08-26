@@ -13,7 +13,7 @@ function createRouter(appSecret, tokenExpSeconds, env) {
     const contactCtrl = new ContactController(contactStorage);
 
     const router = new Router();
-    router.use(setUserMiddleware);
+    router.use(setUserMiddleware(appSecret));
 
     router.post("/users", userCtrl.registerAccount());
     router.post("/users/login", userCtrl.login());
@@ -21,18 +21,20 @@ function createRouter(appSecret, tokenExpSeconds, env) {
     return router;
 }
 
- async function setUserMiddleware(ctx, next) {
-    try {
-        const token = jwt.verify(ctx.request.headers["auth-token"], process.env.APP_SECRET);
-        if (!ctx.context) {
-            ctx.context = {};
+function setUserMiddleware(appSecret) {
+    return async (ctx, next) => {
+        try {
+            const token = jwt.verify(ctx.request.headers["auth-token"], appSecret);
+            if (!ctx.context) {
+                ctx.context = {};
+            }
+            ctx.context.userId = token.id;
+            ctx.context.userEmail = token.email; 
+        } catch {
+            // noop, no token was given
         }
-        ctx.context.userId = token.id;
-        ctx.context.userEmail = token.email; 
-    } catch {
-        // noop, no token was given
+        await next();
     }
-    await next();
 }
 
 async function authMiddleware(ctx, next) {
