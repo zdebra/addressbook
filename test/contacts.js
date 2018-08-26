@@ -53,5 +53,26 @@ describe("contact management", () => {
             assert.equal(response.body.address, reqBody.address);
             assert.exists(response.body.id);
         });
+
+        it("shouldn't create contact for user without token", async () => {
+            const reqBody = {"name": "wuf is this","phone": "123456", "address": "Rohanské nábř. 678/23, 186 00 Praha 8-Karlín"}
+            response = await chai.request(server)
+                .post("/users/contact")
+                .set("Content-Type", "application/json")
+                .send(reqBody);
+
+            assert.equal(response.status, 401);
+        });
+
+        it("shouldn't create contact for user with invalid token", async () => {
+            const reqBody = {"name": "wuf is this","phone": "123456", "address": "Rohanské nábř. 678/23, 186 00 Praha 8-Karlín"}
+            response = await chai.request(server)
+                .post("/users/contact")
+                .set("Content-Type", "application/json")
+                .set("auth-token", "bulcrap")
+                .send(reqBody);
+
+            assert.equal(response.status, 401);
+        });
     });
 });
