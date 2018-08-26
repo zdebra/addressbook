@@ -15,25 +15,10 @@ function createRouter(appSecret, tokenExpSeconds) {
 
     const router = new Router();
     router.use(setUserMiddleware);
-
-    router.post("/users", async (ctx) => {
-        const body = ctx.request.body;
-        const user = await userCtrl.registerAccount(body.email, body.password);
-        ctx.body = user.short;
-    });
-
-    router.post("/users/login", async (ctx) => {
-        const body = ctx.request.body;
-        const token = await userCtrl.login(body.email,body.password);
-        ctx.body = { "token": token };
-    });
-
-    router.post("/users/contact", authMiddleware, async (ctx) => {
-        const userId = ctx.context.userId;
-        const contact = await contactCtrl.createContact(userId, ctx.request.body);
-        ctx.body = contact; 
-    });
-
+    
+    router.post("/users", userCtrl.registerAccount());
+    router.post("/users/login", userCtrl.login());
+    router.post("/users/contact", authMiddleware,  contactCtrl.createContact());
     return router;
 }
 

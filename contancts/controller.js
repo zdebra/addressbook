@@ -7,14 +7,18 @@ class ContactController {
         this._storage = storage;
     }
 
-    async createContact(userId, contact) {
-        contact.userId = userId;
-        contact.id = uuid();
-        if (!utils.validContact(contact)) {
-            throw new ExposedError(400, "invalid contact")
+    createContact() {
+        return async (ctx) => {
+            const userId = ctx.context.userId;
+            let contact = ctx.request.body;
+            contact.userId = userId;
+            contact.id = uuid();
+            if (!utils.validContact(contact)) {
+                throw new ExposedError(400, "invalid contact")
+            }
+            await this._storage.store(contact);
+            ctx.body = contact; 
         }
-        await this._storage.store(contact);
-        return contact;
     }
 }
 
