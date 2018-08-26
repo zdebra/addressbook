@@ -13,7 +13,7 @@ describe("contact management", () => {
     describe("/POST users/contact", () => {
         const userEmail = "abcd@efcd.com"
         const userPassword = "V1ngrdiasdiousa"
-        let token;
+        let token, decodedToken;
 
         // create user and login for retrieving token used in following test scenarios
         before(async () => {
@@ -35,20 +35,23 @@ describe("contact management", () => {
                 throw new Error(`couldn't register new user: ${regResponse.body}`);
             }
             token = loginResponse.body.token;
-            jwt.verify(token, appSecret);
+            decodedToken = jwt.verify(token, appSecret);
         })
 
         it("should create contact for user from token", async () => {
-
+            const reqBody = {"name": "wuf is this","phone": "123456", "address": "Rohanské nábř. 678/23, 186 00 Praha 8-Karlín"}
             response = await chai.request(server)
                 .post("/users/contact")
                 .set("Content-Type", "application/json")
                 .set("auth-token", token)
-                .send({"phone": "123456", "address": "Rohanské nábř. 678/23, 186 00 Praha 8-Karlín"});
+                .send(reqBody);
 
             assert.equal(response.status, 200);
-        
-
+            assert.equal(response.body.userId, decodedToken.id);
+            assert.equal(response.body.name, reqBody.name);
+            assert.equal(response.body.phone, reqBody.phone);
+            assert.equal(response.body.address, reqBody.address);
+            assert.exists(response.body.id);
         });
     });
 });

@@ -6,7 +6,6 @@ const ContactController = require('./contancts/controller');
 const ExposedError = require('./error');
 const jwt = require('jsonwebtoken');
 
-
 function createRouter(appSecret, tokenExpSeconds) {
     const userStorage = new UserStorage();
     const contactStorage = makeContactStorage();
@@ -15,7 +14,7 @@ function createRouter(appSecret, tokenExpSeconds) {
 
     const router = new Router();
     router.use(setUserMiddleware);
-    
+
     router.post("/users", userCtrl.registerAccount());
     router.post("/users/login", userCtrl.login());
     router.post("/users/contact", authMiddleware,  contactCtrl.createContact());

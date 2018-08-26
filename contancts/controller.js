@@ -1,4 +1,4 @@
-const utils = require('./utils');
+const Contact = require('./contact');
 const uuid = require('uuid/v4');
 const ExposedError = require('../error');
 
@@ -10,14 +10,14 @@ class ContactController {
     createContact() {
         return async (ctx) => {
             const userId = ctx.context.userId;
-            let contact = ctx.request.body;
-            contact.userId = userId;
-            contact.id = uuid();
-            if (!utils.validContact(contact)) {
-                throw new ExposedError(400, "invalid contact")
+            const body = ctx.request.body;
+            const contact = new Contact(uuid(), userId, body.name, body.address, body.phone);
+
+            if (!contact.isValid()) {
+                throw new ExposedError(400, "contact is invalid")
             }
             await this._storage.store(contact);
-            ctx.body = contact; 
+            ctx.body = contact.short; 
         }
     }
 }
