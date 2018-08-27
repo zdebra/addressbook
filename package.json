@@ -5,8 +5,9 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha",
-    "start": "node app.js",
-    "setupDatabase": "cd migrations && pg-migrator ${DATABASE_URL}"
+    "server": "node app.js",
+    "database": "cd migrations && pg-migrator ${DATABASE_URL}",
+    "start": "npm run database && npm run server"
   },
   "engines" : { 
     "node" : ">=10.9"
