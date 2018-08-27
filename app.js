@@ -21,7 +21,7 @@ app.use(bodyParser());
 const appSecret = process.env.APP_SECRET || 'app-secret';
 const tokenExpSeconds = process.env.TOKEN_EXP || '1h';
 const env = process.env.NODE_ENV || constants.prodEnv;
-const dbConnectionString = process.env.PG_CONN;
+const dbConnectionString = process.env.DATABASE_URL;
 const router = createRouter(appSecret, tokenExpSeconds, env, dbConnectionString);
 
 app.use(router.routes());

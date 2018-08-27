@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha",
     "start": "node app.js",
-    "setupDatabase": "cd migrations && pg-migrator ${PG_CONN}"
+    "setupDatabase": "cd migrations && pg-migrator ${DATABASE_URL}"
   },
   "author": "zd.brabec@gmail.com",
   "license": "ISC",
