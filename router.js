@@ -7,15 +7,22 @@ const ExposedError = require('./error');
 const jwt = require('jsonwebtoken');
 const testEnv = require('./constants').testEnv;
 const makeDB = require('./database');
+const firebaseAdmin = require('firebase-admin');
 
-function createRouter(appSecret, tokenExpSeconds, env, connectionString) {
-    let db;
+function createRouter(appSecret, tokenExpSeconds, env, connectionString, firebaseConfig) {
+    let postgresDB, firebaseDB;
     if (env != testEnv) {
-        db = makeDB(connectionString);
+        postgresDB = makeDB(connectionString);
+
+        firebaseAdmin.initializeApp({
+            credential: firebaseAdmin.credential.cert(JSON.parse(firebaseConfig)),
+            databaseURL: 'https://address-book-8b54b.firebaseio.com'
+        });
+        firebaseDB = firebaseAdmin.database();
     }
 
-    const userStorage = makeUserStorage(env, db);
-    const contactStorage = makeContactStorage(env);
+    const userStorage = makeUserStorage(env, postgresDB);
+    const contactStorage = makeContactStorage(env, firebaseDB);
     const userCtrl = new UserController(userStorage, appSecret, tokenExpSeconds);
     const contactCtrl = new ContactController(contactStorage);
 
