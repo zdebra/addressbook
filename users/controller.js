@@ -25,7 +25,7 @@ class UserController {
             }
 
             const passwordHash = await utils.hashPassword(password);
-            const user = new User(uuid(), email, passwordHash, Date.now());
+            const user = new User(uuid(), email, passwordHash, new Date());
             await this._storage.insert(user);
             ctx.body = user.short;
         }
