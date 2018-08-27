@@ -1,4 +1,7 @@
+[![Heroku](https://heroku-badge.herokuapp.com/?app=zdebra-address-book-deploy)]
+
 # Address book
+The app is running [here](https://zdebra-address-book-deploy.herokuapp.com/).
 
 ## Commands
 - `npm run doc` - generates api documentation
@@ -9,7 +12,7 @@
 - `NODE_ENV` - set to `prodEnv` or `testEnv`
 - `DATABASE_URL` - use postgress connection URI
 - `FIREBASE_CONFIG` - provide stringified JSON firebase configuration (This is used because the repository is public)
+- `PORT` - port where server will be running
 
-### Todo
-- _logging_ In production environment, there should be.
-- _ESlint_ I just wrote the code without any prettifiers.
+### What I didn't do
+- _logging_ 

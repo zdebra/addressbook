@@ -23,6 +23,7 @@ const tokenExpSeconds = process.env.TOKEN_EXP || '1h';
 const env = process.env.NODE_ENV || constants.prodEnv;
 const dbConnectionString = process.env.DATABASE_URL;
 const firebaseConfig = process.env.FIREBASE_CONFIG;
+const port = process.env.PORT || 3000;
 const router = createRouter(appSecret, tokenExpSeconds, env, dbConnectionString, firebaseConfig);
 
 app.use(router.routes());
@@ -32,7 +33,6 @@ app.on('error', (err) => {
   console.log(err);
 });
 
-const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
   console.log(`webserver started on port ${port}`);
 });
