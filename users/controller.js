@@ -11,6 +11,29 @@ class UserController {
         this._tokenExpSeconds = tokenExpSeconds;
     }
 
+    /**
+     * @api {post} /users Register account
+     * @apiName RegisterAccount
+     * @apiGroup User
+     * 
+     * @apiParam {String} email Email address.
+     * @apiParam {String} password User pasword.
+     *
+     * @apiExample {curl} Example usage:
+     *     curl --request POST \
+     *          --url http://localhost:3000/users \
+     *          --header 'content-type: application/json' \
+     *          --data '{
+     *              "email": "abcd@cdef.com",
+     *              "password": "ABcd1234"
+     *          }'
+     *
+     * @apiError InvalidEmail If given address is not a valid email.
+     * @apiError InvalidPassword Password must contain at least 6 characters, one number, one lowercase and one uppercase letter.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 400 Bad request
+     */
     registerAccount()  {
         return async (ctx) => {
             const body = ctx.request.body;
@@ -31,6 +54,26 @@ class UserController {
         }
     }
 
+    /**
+     * @api {post} /users/login Login
+     * @apiName Login
+     * @apiGroup User
+     * 
+     * @apiParam {String} email Email address.
+     * @apiParam {String} password User pasword.
+     *
+     * @apiExample {curl} Example usage:
+     *     curl --request POST \
+     *          --url http://localhost:3000/users/login \
+     *          --header 'content-type: application/json' \
+     *          --data '{
+     *              "email": "abcd@cdef.com",
+     *              "password": "ABcd1234"
+     *          }'
+     *
+     * @apiError UserNotFound If given email address is not associated with any of user accounts.
+     * @apiError InvalidPassword Password doesn't match.
+     */
     login() {
         return async (ctx) => {
             const body = ctx.request.body;

@@ -7,7 +7,8 @@
     "test": "mocha",
     "server": "node app.js",
     "database": "cd migrations && pg-migrator ${DATABASE_URL}",
-    "start": "npm run database && npm run server"
+    "start": "npm run database && npm run server",
+    "doc": "apidoc -f users/controller.js -f contacts/controller.js"
   },
   "engines": {
     "node": ">=10.9"
@@ -27,5 +28,8 @@
     "pg": "^7.4.3",
     "pg-migrator": "^1.0.5",
     "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "apidoc": "^0.17.6"
   }
 }
