@@ -1,5 +1,3 @@
-[![Heroku](https://heroku-badge.herokuapp.com/?app=zdebra-address-book-deploy)]
-
 # Address book
 The app is running [here](https://zdebra-address-book-deploy.herokuapp.com/).
 
