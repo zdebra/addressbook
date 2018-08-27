@@ -8,6 +8,9 @@
     "start": "node app.js",
     "setupDatabase": "cd migrations && pg-migrator ${DATABASE_URL}"
   },
+  "engines" : { 
+    "node" : ">=10.9"
+  },
   "author": "zd.brabec@gmail.com",
   "license": "ISC",
   "dependencies": {
