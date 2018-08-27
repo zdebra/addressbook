@@ -5,9 +5,16 @@ const makeContactStorage = require('./contancts/storage');
 const ContactController = require('./contancts/controller');
 const ExposedError = require('./error');
 const jwt = require('jsonwebtoken');
+const testEnv = require('./constants').testEnv;
+const makeDB = require('./database');
 
-function createRouter(appSecret, tokenExpSeconds, env) {
-    const userStorage = makeUserStorage(env);
+function createRouter(appSecret, tokenExpSeconds, env, connectionString) {
+    let db;
+    if (env != testEnv) {
+        db = makeDB(connectionString);
+    }
+
+    const userStorage = makeUserStorage(env, db);
     const contactStorage = makeContactStorage(env);
     const userCtrl = new UserController(userStorage, appSecret, tokenExpSeconds);
     const contactCtrl = new ContactController(contactStorage);

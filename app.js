@@ -21,7 +21,8 @@ app.use(bodyParser());
 const appSecret = process.env.APP_SECRET || 'app-secret';
 const tokenExpSeconds = process.env.TOKEN_EXP || '1h';
 const env = process.env.NODE_ENV || constants.prodEnv;
-const router = createRouter(appSecret, tokenExpSeconds, env);
+const dbConnectionString = process.env.PG_CONN;
+const router = createRouter(appSecret, tokenExpSeconds, env, dbConnectionString);
 
 app.use(router.routes());
 app.use(router.allowedMethods());
@@ -35,4 +36,4 @@ const server = app.listen(port, () => {
   console.log(`webserver started on port ${port}`);
 });
 
-module.exports = server; // for testing
+module.exports = server;

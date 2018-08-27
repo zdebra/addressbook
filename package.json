@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha",
-    "start": "node app.js"
+    "start": "node app.js",
+    "setupDatabase": "cd migrations && pg-migrator ${PG_CONN}"
   },
   "author": "zd.brabec@gmail.com",
   "license": "ISC",
@@ -18,6 +19,8 @@
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
     "mocha": "^5.2.0",
+    "pg": "^7.4.3",
+    "pg-migrator": "^1.0.5",
     "uuid": "^3.3.2"
   }
 }

@@ -1,5 +1,11 @@
-const format = require('util').format;
 const constants = require('../constants');
+
+function make(env, db) {
+    if (env == constants.testEnv) {
+        return new UserMemoryStorage();
+    } 
+    return new UserPersistStorage(db);
+}
 
 class UserMemoryStorage {
     constructor() {
@@ -7,17 +13,11 @@ class UserMemoryStorage {
     }
 
     async insert(user) {
-        if (!user.id) {
-            throw new Error("missing id attribute");
-        }
-        if (!user.email) {
-            throw new Error("missing email attribute");
-        }
-        if (!user.passwordHash) {
-            throw new Error("missing password hash attribute");
+        if (!user.isValid()) {
+            throw new Error("user is invalid");
         }
         if (this._users.has(user.email)) {
-            throw new Error(format("user %s already exist", user.email))
+            throw new Error(`user ${user.email} already exist`);
         }
         this._users.set(user.email, user);
     }
@@ -25,16 +25,28 @@ class UserMemoryStorage {
     async withEmail(email) {
         const user = this._users.get(email);
         if (!user) {
-            throw new Error(format("user with email %s doesn't exist", email));
+            throw new Error(`user with ${email} doesn't exist`);
         }
         return user;
     }
 }
 
-function make(env) {
-    if (env == constants.testEnv) {
-        return new UserMemoryStorage();
+class UserPersistStorage {
+    constructor(db) {
+        this._db = db;
     }
+
+    async insert(user) {
+        if (!user.isValid()) {
+            throw new Error("user is invalid");
+        }
+        
+    }
+
+    async withMail(email) {
+
+    }
+
 }
 
 module.exports = make;

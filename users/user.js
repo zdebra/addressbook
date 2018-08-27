@@ -32,6 +32,10 @@ class User {
         }
     }
 
+    isValid() {
+        return this.id && this.email && this.passwordHash
+    }
+
     async passwordMatch(password) {
         const match = await utils.comparePasswordWithHash(password, this._passwordHash);
         return match
